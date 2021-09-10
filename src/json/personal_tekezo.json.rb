@@ -7,7 +7,11 @@
 #
 
 require 'json'
-require_relative '../lib/karabiner.rb'
+require_relative '../lib/karabiner'
+
+PARAMETERS = {
+  :simultaneous_threshold_milliseconds => 500,
+}.freeze
 
 def main
   puts JSON.pretty_generate(
@@ -15,9 +19,11 @@ def main
     'maintainers' => ['tekezo'],
     'rules' => [
       {
-        'description' => 'Personal rules (@tekezo) (rev 28)',
+        'description' => 'Personal rules (@tekezo) (rev 32)',
+        'available_since' => '13.6.0',
         'manipulators' =>
         core_configuration +
+        emacs +
         mouse +
         control_1234 +
         option_hyphen +
@@ -136,6 +142,57 @@ def core_configuration
     # left_command
     ########################################
 
+    # left_shift+left_command
+    {
+      'type' => 'basic',
+      'from' => {
+        'key_code' => 'left_command',
+        'modifiers' => Karabiner.from_modifiers(['left_shift']),
+      },
+      'to' => [
+        {
+          'key_code' => 'left_control',
+          'modifiers' => ['left_shift'],
+          'lazy' => true,
+        },
+      ],
+      'to_if_alone' => [
+        {
+          'key_code' => 'grave_accent_and_tilde',
+          'modifiers' => ['left_command'],
+        },
+      ],
+      'parameters' => {
+        'basic.to_if_alone_timeout_milliseconds' => 250,
+      },
+    },
+
+    # right_command+left_command
+    {
+      'type' => 'basic',
+      'from' => {
+        'key_code' => 'left_command',
+        'modifiers' => Karabiner.from_modifiers(['right_command']),
+      },
+      'to' => [
+        {
+          'key_code' => 'left_control',
+          'modifiers' => ['right_command'],
+          'lazy' => true,
+        },
+      ],
+      'to_if_alone' => [
+        {
+          'key_code' => 'grave_accent_and_tilde',
+          'modifiers' => ['left_command'],
+        },
+      ],
+      'parameters' => {
+        'basic.to_if_alone_timeout_milliseconds' => 250,
+      },
+    },
+
+    # left_command
     {
       'type' => 'basic',
       'from' => {
@@ -209,57 +266,6 @@ def core_configuration
     ########################################
     # spacebar
     ########################################
-
-    # right_command+spacebar
-    {
-      'type' => 'basic',
-      'from' => {
-        'key_code' => 'spacebar',
-        'modifiers' => Karabiner.from_modifiers(['right_command']),
-      },
-      'to' => [
-        {
-          'key_code' => 'left_shift',
-          'modifiers' => ['right_command'],
-        },
-      ],
-      'to_if_alone' => [
-        {
-          'key_code' => 'grave_accent_and_tilde',
-          'modifiers' => ['left_command'],
-        },
-      ],
-      'parameters' => {
-        'basic.to_if_alone_timeout_milliseconds' => 250,
-      },
-    },
-
-    # right_option+spacebar
-    {
-      'type' => 'basic',
-      'from' => {
-        'key_code' => 'spacebar',
-        'modifiers' => Karabiner.from_modifiers(['right_option']),
-      },
-      'to' => [
-        {
-          'key_code' => 'left_shift',
-          'modifiers' => ['right_option'],
-        },
-      ],
-      'to_if_alone' => [
-        {
-          'key_code' => 'tab',
-          'modifiers' => ['left_command'],
-        },
-        {
-          'key_code' => 'vk_none',
-        },
-      ],
-      'parameters' => {
-        'basic.to_if_alone_timeout_milliseconds' => 250,
-      },
-    },
 
     # spacebar
     {
@@ -411,6 +417,27 @@ def core_configuration
   ]
 end
 
+def emacs
+  [
+    {
+      'type' => 'basic',
+      'from' => {
+        'key_code' => 'i',
+        'modifiers' => Karabiner.from_modifiers(['control'], %w[caps_lock shift]),
+      },
+      'to' => [{ 'key_code' => 'tab' }],
+    },
+    {
+      'type' => 'basic',
+      'from' => {
+        'key_code' => 'h',
+        'modifiers' => Karabiner.from_modifiers(['control'], %w[caps_lock shift]),
+      },
+      'to' => [{ 'key_code' => 'delete_or_backspace' }],
+    },
+  ]
+end
+
 def mouse
   [
     # mouse_motion_to_scroll (button5)
@@ -467,6 +494,86 @@ def mouse
       ],
     },
   ]
+end
+
+def generate_mouse_keys_mode(from_key_code, to, scroll_to, to_after_key_up)
+  data = []
+
+  ############################################################
+
+  unless scroll_to.nil?
+    h = {
+      'type' => 'basic',
+      'from' => {
+        'key_code' => from_key_code,
+        'modifiers' => Karabiner.from_modifiers,
+      },
+      'to' => scroll_to,
+      'conditions' => [
+        Karabiner.variable_if('mouse_keys_mode_v4', 1),
+        Karabiner.variable_if('mouse_keys_mode_v4_scroll', 1),
+      ],
+    }
+
+    h['to_after_key_up'] = to_after_key_up unless to_after_key_up.nil?
+
+    data << h
+  end
+
+  ############################################################
+
+  h = {
+    'type' => 'basic',
+    'from' => {
+      'key_code' => from_key_code,
+      'modifiers' => Karabiner.from_modifiers,
+    },
+    'to' => to,
+    'conditions' => [Karabiner.variable_if('mouse_keys_mode_v4', 1)],
+  }
+
+  h['to_after_key_up'] = to_after_key_up unless to_after_key_up.nil?
+
+  data << h
+
+  ############################################################
+
+  h = {
+    'type' => 'basic',
+    'from' => {
+      'simultaneous' => [
+        {
+          'key_code' => 'd',
+        },
+        {
+          'key_code' => from_key_code,
+        },
+      ],
+      'simultaneous_options' => {
+        'key_down_order' => 'strict',
+        'key_up_order' => 'strict_inverse',
+        'to_after_key_up' => [
+          Karabiner.set_variable('mouse_keys_mode_v4', 0),
+          Karabiner.set_variable('mouse_keys_mode_v4_scroll', 0),
+        ],
+      },
+      'modifiers' => Karabiner.from_modifiers,
+    },
+    'to' => [
+      Karabiner.set_variable('mouse_keys_mode_v4', 1),
+    ].concat(to),
+    'parameters' => {
+      'basic.simultaneous_threshold_milliseconds' => PARAMETERS[:simultaneous_threshold_milliseconds],
+    },
+  }
+
+  h['to_after_key_up'] = to_after_key_up unless to_after_key_up.nil?
+
+  data << h
+
+  ############################################################
+
+  data
 end
 
 def control_1234
@@ -738,6 +845,22 @@ def app_finder
         'key_code' => 'l',
         'modifiers' => Karabiner.from_modifiers(['command'], ['caps_lock']),
       },
+      'conditions' => [
+        Karabiner.frontmost_application_if(['finder']),
+      ],
+    },
+    {
+      'type' => 'basic',
+      'from' => {
+        'key_code' => 'q',
+        'modifiers' => Karabiner.from_modifiers(['control'], ['caps_lock']),
+      },
+      'to' => [
+        {
+          'key_code' => 'up_arrow',
+          'modifiers' => ['left_command'],
+        },
+      ],
       'conditions' => [
         Karabiner.frontmost_application_if(['finder']),
       ],

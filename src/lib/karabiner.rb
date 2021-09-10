@@ -19,7 +19,9 @@ module Karabiner
       '^org\.mozilla\.firefox$',
       '^org\.mozilla\.nightly$',
       '^com\.microsoft\.Edge', # prefix
+      '^com\.microsoft\.edgemac', # prefix
       '^com\.google\.Chrome$',
+      '^com\.brave\.Browser$',
       '^com\.apple\.Safari$',
     ],
 
@@ -174,6 +176,15 @@ module Karabiner
       'set_variable' => {
         'name' => name,
         'value' => value,
+      },
+    }
+  end
+
+  def self.set_notification_message(id, text)
+    {
+      'set_notification_message' => {
+        'id' => id,
+        'text' => text,
       },
     }
   end

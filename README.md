@@ -1,5 +1,5 @@
 [![Build Status](https://github.com/pqrs-org/KE-complex_modifications/workflows/KE-complex_modifications%20CI/badge.svg)](https://github.com/pqrs-org/KE-complex_modifications/actions)
-[![License](https://img.shields.io/badge/license-Public%20Domain-blue.svg)](https://github.com/pqrs-org/KE-complex_modifications/blob/master/LICENSE.md)
+[![License](https://img.shields.io/badge/license-Public%20Domain-blue.svg)](https://github.com/pqrs-org/KE-complex_modifications/blob/main/LICENSE.md)
 
 # KE-complex_modifications
 
@@ -9,9 +9,9 @@ complex_modifications for Karabiner-Elements.
 
 ## Add rules
 
-1.  Put a `.rb` (or `.erb`) template file into [src/json](https://github.com/pqrs-org/KE-complex_modifications/tree/master/src/json). (Or put a `.json` file into [public/json](https://github.com/pqrs-org/KE-complex_modifications/tree/master/public/json) directly.)
-2.  (Optional) Put extra description file into [public/extra_descriptions](https://github.com/pqrs-org/KE-complex_modifications/tree/master/public/extra_descriptions).
-3.  Add the following json into [public/groups.json](https://github.com/pqrs-org/KE-complex_modifications/tree/master/public/groups.json) &gt; `files`.
+1.  Put a `.rb` (or `.erb`) template file into [src/json](https://github.com/pqrs-org/KE-complex_modifications/tree/main/src/json). (Or put a `.json` file into [public/json](https://github.com/pqrs-org/KE-complex_modifications/tree/main/public/json) directly.)
+2.  (Optional) Put extra description file into [public/extra_descriptions](https://github.com/pqrs-org/KE-complex_modifications/tree/main/public/extra_descriptions).
+3.  Add the following json into [public/groups.json](https://github.com/pqrs-org/KE-complex_modifications/tree/main/public/groups.json) &gt; `files`.
 
     ```json5
     {

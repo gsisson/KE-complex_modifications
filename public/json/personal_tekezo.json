@@ -5,7 +5,8 @@
   ],
   "rules": [
     {
-      "description": "Personal rules (@tekezo) (rev 28)",
+      "description": "Personal rules (@tekezo) (rev 32)",
+      "available_since": "13.6.0",
       "manipulators": [
         {
           "type": "basic",
@@ -167,6 +168,74 @@
           "from": {
             "key_code": "left_command",
             "modifiers": {
+              "mandatory": [
+                "left_shift"
+              ],
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_control",
+              "modifiers": [
+                "left_shift"
+              ],
+              "lazy": true
+            }
+          ],
+          "to_if_alone": [
+            {
+              "key_code": "grave_accent_and_tilde",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "parameters": {
+            "basic.to_if_alone_timeout_milliseconds": 250
+          }
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "left_command",
+            "modifiers": {
+              "mandatory": [
+                "right_command"
+              ],
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_control",
+              "modifiers": [
+                "right_command"
+              ],
+              "lazy": true
+            }
+          ],
+          "to_if_alone": [
+            {
+              "key_code": "grave_accent_and_tilde",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "parameters": {
+            "basic.to_if_alone_timeout_milliseconds": 250
+          }
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "left_command",
+            "modifiers": {
               "optional": [
                 "any"
               ]
@@ -266,75 +335,6 @@
           "to_if_alone": [
             {
               "key_code": "lang1"
-            }
-          ],
-          "parameters": {
-            "basic.to_if_alone_timeout_milliseconds": 250
-          }
-        },
-        {
-          "type": "basic",
-          "from": {
-            "key_code": "spacebar",
-            "modifiers": {
-              "mandatory": [
-                "right_command"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_shift",
-              "modifiers": [
-                "right_command"
-              ]
-            }
-          ],
-          "to_if_alone": [
-            {
-              "key_code": "grave_accent_and_tilde",
-              "modifiers": [
-                "left_command"
-              ]
-            }
-          ],
-          "parameters": {
-            "basic.to_if_alone_timeout_milliseconds": 250
-          }
-        },
-        {
-          "type": "basic",
-          "from": {
-            "key_code": "spacebar",
-            "modifiers": {
-              "mandatory": [
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_shift",
-              "modifiers": [
-                "right_option"
-              ]
-            }
-          ],
-          "to_if_alone": [
-            {
-              "key_code": "tab",
-              "modifiers": [
-                "left_command"
-              ]
-            },
-            {
-              "key_code": "vk_none"
             }
           ],
           "parameters": {
@@ -518,6 +518,46 @@
               "modifiers": [
                 "command"
               ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "i",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "tab"
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "delete_or_backspace"
             }
           ]
         },
@@ -1300,6 +1340,36 @@
         {
           "type": "basic",
           "from": {
+            "key_code": "q",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.finder$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
             "key_code": "d",
             "modifiers": {
               "mandatory": [
@@ -1458,7 +1528,9 @@
                 "^org\\.mozilla\\.firefox$",
                 "^org\\.mozilla\\.nightly$",
                 "^com\\.microsoft\\.Edge",
+                "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
             }
@@ -1485,7 +1557,9 @@
                 "^org\\.mozilla\\.firefox$",
                 "^org\\.mozilla\\.nightly$",
                 "^com\\.microsoft\\.Edge",
+                "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
             }
@@ -1512,7 +1586,9 @@
                 "^org\\.mozilla\\.firefox$",
                 "^org\\.mozilla\\.nightly$",
                 "^com\\.microsoft\\.Edge",
+                "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
             }
@@ -1547,7 +1623,9 @@
                 "^org\\.mozilla\\.firefox$",
                 "^org\\.mozilla\\.nightly$",
                 "^com\\.microsoft\\.Edge",
+                "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
             }
@@ -1582,7 +1660,9 @@
                 "^org\\.mozilla\\.firefox$",
                 "^org\\.mozilla\\.nightly$",
                 "^com\\.microsoft\\.Edge",
+                "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
             }
